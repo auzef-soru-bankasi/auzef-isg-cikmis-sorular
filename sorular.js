@@ -218,5 +218,16 @@ const SORU_BANKASI = [
         "secenek_d": "2400 m",
         "secenek_e": "8000 m",
         "dogru_cevap": "RA==" 
+    },
+    {
+        "ders_adi": "MATEMATİK I",
+        "test_adi": "Vize - Test 1",
+        "soru_metni": "<img src='mat1.png' style='width:100%; max-width:500px; display:block; margin: 0 auto; border-radius:8px;'>",
+        "secenek_a": "A Şıkkı",
+        "secenek_b": "B Şıkkı",
+        "secenek_c": "C Şıkkı",
+        "secenek_d": "D Şıkkı",
+        "secenek_e": "E Şıkkı",
+        "dogru_cevap": "Qw==" 
     }
 ];
