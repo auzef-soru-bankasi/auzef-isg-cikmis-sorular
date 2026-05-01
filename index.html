@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUZEF İSG - Soru Bankası</title>
+    <title>AUZEF İSG Lisans Çıkmış Sınav Soruları</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .container { max-width: 600px; width: 100%; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
         h1 { color: #1a73e8; text-align: center; font-size: 22px; margin-bottom: 20px; }
         
         .selection-area { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; }
-        select { padding: 10px; border-radius: 8px; border: 1px solid #dadce0; font-size: 14px; outline: none; }
+        select { padding: 10px; border-radius: 8px; border: 1px solid #dadce0; font-size: 14px; outline: none; background-color: white; }
+        select:disabled { background-color: #e9ecef; cursor: not-allowed; }
         
         .stats { display: flex; justify-content: space-around; margin-bottom: 20px; font-weight: bold; }
         .stat-box { padding: 10px 20px; border-radius: 8px; font-size: 13px; }
@@ -26,12 +27,13 @@
         
         #next-btn { margin-top: 25px; width: 100%; padding: 15px; background: #1a73e8; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; display: none; }
         .placeholder-text { text-align: center; color: #70757a; font-style: italic; }
+        .test-finished { text-align: center; color: #1e8e3e; font-size: 18px; font-weight: bold; padding: 20px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>AUZEF İSG Soru Bankası</h1>
+        <h1>AUZEF İSG Lisans Çıkmış Sınav Soruları</h1>
 
         <div class="selection-area">
             <select id="sinif-select" onchange="updateDonemler()">
@@ -44,8 +46,11 @@
             <select id="donem-select" onchange="updateDersler()" disabled>
                 <option value="">Dönem Seçiniz</option>
             </select>
-            <select id="ders-select" onchange="startQuiz()" disabled>
+            <select id="ders-select" onchange="updateTestler()" disabled>
                 <option value="">Ders Seçiniz</option>
+            </select>
+            <select id="test-select" onchange="startQuiz()" disabled>
+                <option value="">Test Seçiniz</option>
             </select>
         </div>
 
@@ -55,7 +60,7 @@
         </div>
 
         <div id="quiz-area">
-            <p id="placeholder" class="placeholder-text">Lütfen çalışmak istediğiniz dersi seçin.</p>
+            <p id="placeholder" class="placeholder-text">Lütfen sınıf, dönem, ders ve çözmek istediğiniz testi seçin.</p>
             <div id="question" class="question-text"></div>
             <div id="options" class="options"></div>
             <button id="next-btn" onclick="loadNextQuestion()">Sonraki Soru</button>
@@ -87,16 +92,34 @@
             }
         };
 
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
         let currentQuestionId = null;
         let correctScore = parseInt(localStorage.getItem('isg_correct')) || 0;
         let wrongScore = parseInt(localStorage.getItem('isg_wrong')) || 0;
 
+        document.getElementById('correct-count').innerText = correctScore;
+        document.getElementById('wrong-count').innerText = wrongScore;
+
+        function resetQuizArea() {
+            document.getElementById('placeholder').style.display = 'block';
+            document.getElementById('placeholder').innerText = 'Lütfen seçimlerinizi tamamlayın.';
+            document.getElementById('question').style.display = 'none';
+            document.getElementById('options').innerHTML = '';
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
         function updateDonemler() {
             const sinif = document.getElementById('sinif-select').value;
             const donemSelect = document.getElementById('donem-select');
+            
             donemSelect.innerHTML = '<option value="">Dönem Seçiniz</option>';
             document.getElementById('ders-select').innerHTML = '<option value="">Ders Seçiniz</option>';
+            document.getElementById('test-select').innerHTML = '<option value="">Test Seçiniz</option>';
+            
             document.getElementById('ders-select').disabled = true;
+            document.getElementById('test-select').disabled = true;
+            resetQuizArea();
 
             if (sinif) {
                 Object.keys(dersData[sinif]).forEach(donem => {
@@ -112,7 +135,11 @@
             const sinif = document.getElementById('sinif-select').value;
             const donem = document.getElementById('donem-select').value;
             const dersSelect = document.getElementById('ders-select');
+            
             dersSelect.innerHTML = '<option value="">Ders Seçiniz</option>';
+            document.getElementById('test-select').innerHTML = '<option value="">Test Seçiniz</option>';
+            document.getElementById('test-select').disabled = true;
+            resetQuizArea();
 
             if (sinif && donem) {
                 dersData[sinif][donem].forEach(ders => {
@@ -124,37 +151,98 @@
             }
         }
 
-        function startQuiz() {
+        // YENİ EKLENEN KISIM: Seçilen derse ait testleri Supabase'den çekip menüye ekler
+        async function updateTestler() {
             const ders = document.getElementById('ders-select').value;
-            if (ders) {
+            const testSelect = document.getElementById('test-select');
+            
+            testSelect.innerHTML = '<option value="">Test Seçiniz</option>';
+            resetQuizArea();
+
+            if (!ders) {
+                testSelect.disabled = true;
+                return;
+            }
+
+            document.getElementById('placeholder').innerText = 'Testler aranıyor...';
+
+            // Veritabanından sadece bu dersin test isimlerini çek
+            const { data, error } = await _supabase
+                .from('questions')
+                .select('test_adi')
+                .eq('ders_adi', ders);
+
+            if (error || !data || data.length === 0) {
+                document.getElementById('placeholder').innerText = 'Bu derse ait henüz soru/test yüklenmemiş.';
+                testSelect.disabled = true;
+                return;
+            }
+
+            // Aynı test isimlerini (Örn: 20 tane Test 1 varsa) teke düşür
+            const uniqueTests = [...new Set(data.map(item => item.test_adi).filter(t => t))];
+
+            if (uniqueTests.length === 0) {
+                document.getElementById('placeholder').innerText = 'Bu dersin sorularında "Test Adı" bilgisi eksik.';
+                testSelect.disabled = true;
+                return;
+            }
+
+            // Testleri menüye ekle
+            uniqueTests.sort().forEach(test => {
+                testSelect.innerHTML += `<option value="${test}">${test}</option>`;
+            });
+
+            testSelect.disabled = false;
+            document.getElementById('placeholder').innerText = 'Lütfen çözmek istediğiniz testi seçin.';
+        }
+
+        async function startQuiz() {
+            const ders = document.getElementById('ders-select').value;
+            const test = document.getElementById('test-select').value;
+
+            if (ders && test) {
+                document.getElementById('placeholder').style.display = 'block';
+                document.getElementById('placeholder').innerText = 'Sorular yükleniyor...';
+                document.getElementById('question').style.display = 'none';
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('next-btn').style.display = 'none';
+
+                // Hem seçilen dersi hem de seçilen testi filtrele
+                const { data, error } = await _supabase
+                    .from('questions')
+                    .select('*')
+                    .eq('ders_adi', ders)
+                    .eq('test_adi', test);
+
+                if (error || !data || data.length === 0) {
+                    document.getElementById('placeholder').innerText = 'Bu teste ait soru bulunamadı.';
+                    return;
+                }
+
+                currentQuestions = data.sort(() => Math.random() - 0.5);
+                currentQuestionIndex = 0;
+
                 document.getElementById('placeholder').style.display = 'none';
                 document.getElementById('question').style.display = 'block';
                 loadNextQuestion();
             }
         }
 
-        async function loadNextQuestion() {
-            const ders = document.getElementById('ders-select').value;
-            const sinif = document.getElementById('sinif-select').value;
-            
-            document.getElementById('next-btn').style.display = 'none';
-            document.getElementById('options').innerHTML = '';
-            document.getElementById('question').innerText = 'Soru getiriliyor...';
-
-            const { data, error } = await _supabase
-                .from('questions')
-                .select('*')
-                .eq('ders_adi', ders)
-                .limit(1);
-
-            if (error || !data || data.length === 0) {
-                document.getElementById('question').innerText = 'Bu derse ait henüz soru yüklenmemiş.';
+        function loadNextQuestion() {
+            if (currentQuestionIndex >= currentQuestions.length) {
+                document.getElementById('question').innerHTML = '<div class="test-finished">Tebrikler! Bu testi tamamladınız. 🎉<br>Menüden başka bir test seçebilirsiniz.</div>';
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('next-btn').style.display = 'none';
                 return;
             }
 
-            const q = data[0];
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('options').innerHTML = '';
+
+            const q = currentQuestions[currentQuestionIndex];
             currentQuestionId = q.id;
-            document.getElementById('question').innerText = q.soru_metni;
+            
+            document.getElementById('question').innerText = `Soru ${currentQuestionIndex + 1}/${currentQuestions.length}: ${q.soru_metni}`;
 
             const opts = [
                 { key: 'A', text: q.secenek_a },
@@ -191,6 +279,8 @@
                 btn.classList.add('wrong');
                 wrongScore++;
             }
+            
+            currentQuestionIndex++;
 
             localStorage.setItem('isg_correct', correctScore);
             localStorage.setItem('isg_wrong', wrongScore);
@@ -198,9 +288,6 @@
             document.getElementById('wrong-count').innerText = wrongScore;
             document.getElementById('next-btn').style.display = 'block';
         }
-
-        document.getElementById('correct-count').innerText = correctScore;
-        document.getElementById('wrong-count').innerText = wrongScore;
     </script>
 </body>
 </html>
