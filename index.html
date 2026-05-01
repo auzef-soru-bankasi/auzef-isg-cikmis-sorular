@@ -94,12 +94,10 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://uvdilqnmdyfvntdcdfiv.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_m-58nv-vhIZVfdtZVtA8iQ_yEsMRacL';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <!-- Sorularımızı Çektiğimiz Yerel Dosyamız -->
+    <script src="sorular.js"></script>
 
+    <script>
         const dersData = {
             "1. Sınıf": {
                 "Güz": ["ATATÜRK İLKELERİ VE İNKILAP TARİHİ I", "HUKUKUN TEMEL KAVRAMLARI", "İLK YARDIM", "İŞ HİJYENİ", "TEMEL MATEMATİK", "TÜRK DİLİ I", "YABANCI DİL I"],
@@ -121,7 +119,6 @@
 
         let currentQuestions = [];
         let currentQuestionIndex = 0;
-        let currentQuestionId = null;
         let correctScore = parseInt(localStorage.getItem('isg_correct')) || 0;
         let wrongScore = parseInt(localStorage.getItem('isg_wrong')) || 0;
 
@@ -178,7 +175,7 @@
             }
         }
 
-        async function updateTestler() {
+        function updateTestler() {
             const ders = document.getElementById('ders-select').value;
             const testSelect = document.getElementById('test-select');
             
@@ -190,26 +187,21 @@
                 return;
             }
 
-            document.getElementById('placeholder').innerText = 'Testler aranıyor...';
+            if (typeof SORU_BANKASI === 'undefined') {
+                document.getElementById('placeholder').innerText = 'Sorular yüklenemedi. Lütfen sorular.js dosyasını kontrol edin.';
+                testSelect.disabled = true;
+                return;
+            }
 
-            const { data, error } = await _supabase
-                .from('questions')
-                .select('test_adi')
-                .eq('ders_adi', ders);
+            const buDersinSorulari = SORU_BANKASI.filter(q => q.ders_adi === ders);
 
-            if (error || !data || data.length === 0) {
+            if (buDersinSorulari.length === 0) {
                 document.getElementById('placeholder').innerText = 'Bu derse ait henüz soru/test yüklenmemiş.';
                 testSelect.disabled = true;
                 return;
             }
 
-            const uniqueTests = [...new Set(data.map(item => item.test_adi).filter(t => t))];
-
-            if (uniqueTests.length === 0) {
-                document.getElementById('placeholder').innerText = 'Bu dersin sorularında "Test Adı" bilgisi eksik.';
-                testSelect.disabled = true;
-                return;
-            }
+            const uniqueTests = [...new Set(buDersinSorulari.map(item => item.test_adi).filter(t => t))];
 
             uniqueTests.sort().forEach(test => {
                 testSelect.innerHTML += `<option value="${test}">${test}</option>`;
@@ -219,7 +211,7 @@
             document.getElementById('placeholder').innerText = 'Lütfen çözmek istediğiniz testi seçin.';
         }
 
-        async function startQuiz() {
+        function startQuiz() {
             const ders = document.getElementById('ders-select').value;
             const test = document.getElementById('test-select').value;
 
@@ -230,13 +222,9 @@
                 document.getElementById('options').innerHTML = '';
                 document.getElementById('next-btn').style.display = 'none';
 
-                const { data, error } = await _supabase
-                    .from('questions')
-                    .select('*')
-                    .eq('ders_adi', ders)
-                    .eq('test_adi', test);
+                const data = SORU_BANKASI.filter(q => q.ders_adi === ders && q.test_adi === test);
 
-                if (error || !data || data.length === 0) {
+                if (data.length === 0) {
                     document.getElementById('placeholder').innerText = 'Bu teste ait soru bulunamadı.';
                     return;
                 }
@@ -262,7 +250,6 @@
             document.getElementById('options').innerHTML = '';
 
             const q = currentQuestions[currentQuestionIndex];
-            currentQuestionId = q.id;
             
             document.getElementById('question').innerText = `Soru ${currentQuestionIndex + 1}/${currentQuestions.length}: ${q.soru_metni}`;
 
@@ -279,20 +266,18 @@
                     const btn = document.createElement('button');
                     btn.className = 'option-btn';
                     btn.innerText = `${opt.key}) ${opt.text}`;
-                    btn.onclick = () => checkAnswer(opt.key, btn);
+                    btn.onclick = () => checkAnswer(opt.key, q.dogru_cevap, btn);
                     document.getElementById('options').appendChild(btn);
                 }
             });
         }
 
-        async function checkAnswer(choice, btn) {
+        function checkAnswer(choice, encryptedCorrectAnswer, btn) {
             const allBtns = document.querySelectorAll('.option-btn');
             allBtns.forEach(b => b.disabled = true);
 
-            const { data: isCorrect } = await _supabase.rpc('check_answer', {
-                p_question_id: currentQuestionId,
-                p_answer: choice
-            });
+            // Şifre Çözücü: Kullanıcının seçtiği harfi (A,B,C) base64 ile şifreleyip veritabanındaki şifreyle eşleştirir
+            const isCorrect = btoa(choice) === encryptedCorrectAnswer;
 
             if (isCorrect) {
                 btn.classList.add('correct');
