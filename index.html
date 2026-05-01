@@ -5,7 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AUZEF İSG Lisans Çıkmış Sınav Soruları</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            background-color: #fdfdfd;
+            background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px);
+            background-size: 25px 25px;
+        }
         .container { max-width: 600px; width: 100%; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
         h1 { color: #1a73e8; text-align: center; font-size: 22px; margin-bottom: 20px; }
         
@@ -151,7 +161,6 @@
             }
         }
 
-        // YENİ EKLENEN KISIM: Seçilen derse ait testleri Supabase'den çekip menüye ekler
         async function updateTestler() {
             const ders = document.getElementById('ders-select').value;
             const testSelect = document.getElementById('test-select');
@@ -166,7 +175,6 @@
 
             document.getElementById('placeholder').innerText = 'Testler aranıyor...';
 
-            // Veritabanından sadece bu dersin test isimlerini çek
             const { data, error } = await _supabase
                 .from('questions')
                 .select('test_adi')
@@ -178,7 +186,6 @@
                 return;
             }
 
-            // Aynı test isimlerini (Örn: 20 tane Test 1 varsa) teke düşür
             const uniqueTests = [...new Set(data.map(item => item.test_adi).filter(t => t))];
 
             if (uniqueTests.length === 0) {
@@ -187,7 +194,6 @@
                 return;
             }
 
-            // Testleri menüye ekle
             uniqueTests.sort().forEach(test => {
                 testSelect.innerHTML += `<option value="${test}">${test}</option>`;
             });
@@ -207,7 +213,6 @@
                 document.getElementById('options').innerHTML = '';
                 document.getElementById('next-btn').style.display = 'none';
 
-                // Hem seçilen dersi hem de seçilen testi filtrele
                 const { data, error } = await _supabase
                     .from('questions')
                     .select('*')
