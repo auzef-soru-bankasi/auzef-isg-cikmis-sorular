@@ -10,5 +10,213 @@ const SORU_BANKASI = [
         "secenek_e": "10 km",
         "dogru_cevap": "Qw==" 
     },
-    // Diğer sorular da bu şekilde aşağıya doğru devam edecek...
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Aşağıdakilerden hangisi pestisit maruziyetine bağlı olarak kabin personelinde görülebilen şikâyetlerden biri değildir?",
+        "secenek_a": "Baş ağrısı",
+        "secenek_b": "Baş dönmesi",
+        "secenek_c": "Motor duyu kaybı",
+        "secenek_d": "Cilt irritasyonu",
+        "secenek_e": "Bulantı",
+        "dogru_cevap": "Qw==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Aşağıdakilerden hangisi akut dağ hastalığında görülmesi muhtemel bulgulardan biri değildir?",
+        "secenek_a": "Derin uykuya dalma",
+        "secenek_b": "Baş dönmesi",
+        "secenek_c": "Boğulma hissi",
+        "secenek_d": "Denge kaybı",
+        "secenek_e": "Yorgunluk",
+        "dogru_cevap": "QQ==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Kuyudan petrol veya gaz üretiminin kontrol edilmesi ve su enjeksiyonu için kullanılan yapılar aşağıdakilerden hangisinde verilmiştir?",
+        "secenek_a": "Kuyu başları",
+        "secenek_b": "Boru hattı",
+        "secenek_c": "Şamandıra",
+        "secenek_d": "Üretim platformu",
+        "secenek_e": "Manifoldlar",
+        "dogru_cevap": "QQ==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Kuyulardan ürün akışını kontrol etmek için deniz tabanına monte edilmiş yapılar aşağıdakilerden hangisinde verilmiştir?",
+        "secenek_a": "Kuyu başları",
+        "secenek_b": "Valf",
+        "secenek_c": "Manifold",
+        "secenek_d": "Boru hattı",
+        "secenek_e": "Şamandıra",
+        "dogru_cevap": "Qw==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Aşağıdakilerden hangisi ozon maruziyetinin yol açtığı düşünülen ve uçuş ekibinde görülen şikâyetlerden biri değildir?",
+        "secenek_a": "Göğüs ağrısı",
+        "secenek_b": "Nefes darlığı",
+        "secenek_c": "Boğaz ağrısı",
+        "secenek_d": "Myalji",
+        "secenek_e": "Öksürük",
+        "dogru_cevap": "RA==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Aşağıdakilerden hangisi pilotlar için en kapsamlı ticarî lisanstır?",
+        "secenek_a": "CPL",
+        "secenek_b": "ATPL",
+        "secenek_c": "DPL",
+        "secenek_d": "PPL",
+        "secenek_e": "FPL",
+        "dogru_cevap": "Qg==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Aşağıdakilerden hangisi yüksek irtifada çalışanların maruz kaldığı olumsuz etkilerden biridir?",
+        "secenek_a": "Aşırı sıcak",
+        "secenek_b": "İyonizan radyasyon",
+        "secenek_c": "Yüksek ısı",
+        "secenek_d": "Artmış oksijen",
+        "secenek_e": "Yüksek atmosfer basıncı",
+        "dogru_cevap": "Qg==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Kesonda çalışan işçiler, derinde; basınç altında kaç saate kadar çalışabilirler?",
+        "secenek_a": "15 saat",
+        "secenek_b": "10 saat",
+        "secenek_c": "8 saat",
+        "secenek_d": "17 saat",
+        "secenek_e": "12 saat",
+        "dogru_cevap": "Qw==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Wilderness Medical Societ, her 3–4 günde bir dinlenme ile tırmanışın günlük kaç metre ile sınırlandırılmasını önermektedir?",
+        "secenek_a": "1000 m",
+        "secenek_b": "500 m",
+        "secenek_c": "1500 m",
+        "secenek_d": "2000 m",
+        "secenek_e": "700 m",
+        "dogru_cevap": "Qg==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Aşağıdakilerden hangisi dalış ekibinde bulunması zorunlu olan personellerden biri değildir?",
+        "secenek_a": "Aktif dalgıç",
+        "secenek_b": "Yedek dalgıç",
+        "secenek_c": "Dalış amiri",
+        "secenek_d": "Yardımcı dalgıç",
+        "secenek_e": "Hekim",
+        "dogru_cevap": "RQ==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Aşağıdakilerden hangisi petrol platformlarındaki tehlikelerin azaltılmasına ilişkin yapılacak ilk müdahalelerden biri değildir?",
+        "secenek_a": "Su geçirmez botlar giymek",
+        "secenek_b": "Az ışıklı veya kapalı alanlar için güvenilir aydınlatma sağlamak",
+        "secenek_c": "Eldiven ve koruyucu gözlük kullanmak",
+        "secenek_d": "Onarım, güvenlik ve ilk yardım için alet kutusu kitleri sağlamak",
+        "secenek_e": "Çalışma yüzeylerini olabildiğince nemli tutmak",
+        "dogru_cevap": "RQ==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Aşağıdakilerden hangisi uçuş personelinin maruz kaldığı stres faktörlerinden biri değildir?",
+        "secenek_a": "Uyku bozukluğu",
+        "secenek_b": "Uzun çalışma saatleri",
+        "secenek_c": "Ağır iş yükü",
+        "secenek_d": "Öngörülemeyen program değişiklikleri",
+        "secenek_e": "Düzenli çalışma saatleri",
+        "dogru_cevap": "RQ==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "\"Kemik nekrozu ..... metrenin üzerine dalanların beşte birinde görülmektedir.\" Yukarıdaki boşluk hangisi ile doldurulmalıdır?",
+        "secenek_a": "75",
+        "secenek_b": "100",
+        "secenek_c": "50",
+        "secenek_d": "30",
+        "secenek_e": "200",
+        "dogru_cevap": "RQ==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Dekompresyon hastalığına yakalanan kişilerde en sık görülen semptom aşağıdakilerden hangisidir?",
+        "secenek_a": "Bulantı-kusma",
+        "secenek_b": "Diz eklemi şikâyetleri",
+        "secenek_c": "Baş dönmesi",
+        "secenek_d": "Akciğer bulguları",
+        "secenek_e": "Duyu kaybı",
+        "dogru_cevap": "Qg==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Korumasız dalmış bir dalgıcı, termonötr hâlde tutmak için kaç °C su sıcaklığı gereklidir?",
+        "secenek_a": "25°C",
+        "secenek_b": "27°C",
+        "secenek_c": "32°C",
+        "secenek_d": "35°C",
+        "secenek_e": "30°C",
+        "dogru_cevap": "RA==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Yedek dalgıcın hava kordonunun aktif dalgıcın kordonundan kaç metre daha uzun olması standart bir uygulamadır?",
+        "secenek_a": "2",
+        "secenek_b": "5",
+        "secenek_c": "1",
+        "secenek_d": "3",
+        "secenek_e": "4",
+        "dogru_cevap": "QQ==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "İlk pratik dalış elbisesinin icat edildiği yıl aşağıdakilerden hangisidir?",
+        "secenek_a": "1819",
+        "secenek_b": "1850",
+        "secenek_c": "1839",
+        "secenek_d": "1829",
+        "secenek_e": "1859",
+        "dogru_cevap": "QQ==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Dekompresyon hastalığına sebep olan gaz aşağıdakilerden hangisidir?",
+        "secenek_a": "Helyum",
+        "secenek_b": "Karbondioksit",
+        "secenek_c": "Oksijen",
+        "secenek_d": "Nitrojen",
+        "secenek_e": "Karbonmonoksit",
+        "dogru_cevap": "RA==" 
+    },
+    {
+        "ders_adi": "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI",
+        "test_adi": "Final - Test 1",
+        "soru_metni": "Ticari uçaklarda kabin içi basınçlandırma kaç metreye göre yapılmaktadır?",
+        "secenek_a": "5000 m",
+        "secenek_b": "7000 m",
+        "secenek_c": "3500 m",
+        "secenek_d": "2400 m",
+        "secenek_e": "8000 m",
+        "dogru_cevap": "RA==" 
+    }
 ];
