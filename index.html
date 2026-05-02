@@ -1,304 +1,210 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUZEF İSG Lisans Çıkmış Sınav Soruları</title>
-    <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh;
-            background-color: #fdfdfd;
-            background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px);
-            background-size: 25px 25px;
-        }
-        
-        .container { 
-            max-width: 600px; 
-            width: 100%; 
-            background: white; 
-            padding: 30px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            border-top: 6px solid #1a73e8; 
-            margin-top: 3vh; 
-            box-sizing: border-box;
-        }
-        
-        h1 { color: #1a73e8; text-align: center; font-size: 24px; margin-bottom: 25px; font-weight: 700; }
-        
-        .selection-area { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; padding: 20px; background: #f8f9fa; border-radius: 10px; border: 1px solid #e8eaed; }
-        select { padding: 12px; border-radius: 8px; border: 1px solid #dadce0; font-size: 15px; outline: none; background-color: white; color: #3c4043; cursor: pointer; transition: all 0.2s; }
-        select:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.2); }
-        select:disabled { background-color: #e9ecef; cursor: not-allowed; color: #9aa0a6; }
-        
-        .stats { display: flex; justify-content: space-around; margin-bottom: 25px; font-weight: bold; }
-        .stat-box { padding: 12px 25px; border-radius: 8px; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .correct-box { background: #e6f4ea; color: #1e8e3e; border: 1px solid #ceead6; }
-        .wrong-box { background: #fce8e6; color: #d93025; border: 1px solid #fad2cf; }
-        
-        .question-text { font-size: 18px; margin-bottom: 25px; line-height: 1.6; color: #202124; font-weight: 600; display: none; }
-        .question-text img { max-width: 100%; height: auto; display: block; margin: 15px auto; border-radius: 8px; }
-        
-        .options { display: flex; flex-direction: column; gap: 12px; }
-        .option-btn { padding: 16px; border: 2px solid #dadce0; border-radius: 10px; background: white; cursor: pointer; transition: all 0.2s; text-align: left; font-size: 16px; color: #3c4043; font-weight: 500; }
-        .option-btn:hover:not(:disabled) { border-color: #1a73e8; background-color: #f8f9fa; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-        .correct { background-color: #34a853 !important; color: white !important; border-color: #188038 !important; }
-        .wrong { background-color: #ea4335 !important; color: white !important; border-color: #d93025 !important; }
-        
-        #next-btn { margin-top: 30px; width: 100%; padding: 16px; background: #1a73e8; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; display: none; transition: all 0.2s; box-shadow: 0 4px 10px rgba(26,115,232,0.3); }
-        #next-btn:hover { background: #1557b0; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(26,115,232,0.4); }
-        
-        .placeholder-text { text-align: center; color: #70757a; font-style: italic; font-size: 15px; margin: 20px 0; }
-        .test-finished { text-align: center; color: #1e8e3e; font-size: 20px; font-weight: bold; padding: 30px 10px; line-height: 1.5; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İSG Çıkmış Sorular</title>
+
+<style>
+body {font-family:'Segoe UI';display:flex;justify-content:center;padding:20px;background:#f5f5f5;}
+.container {max-width:600px;width:100%;background:white;padding:25px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.1);}
+select,button {padding:10px;margin-bottom:10px;width:100%;}
+.option-btn {margin:5px 0;cursor:pointer;}
+.correct {background:#2ecc71;color:white;}
+.wrong {background:#e74c3c;color:white;}
+#next {display:none;}
+</style>
 </head>
+
 <body>
 
-    <div class="container">
-        <h1>AUZEF İSG Lisans Çıkmış Sınav Soruları</h1>
+<div class="container">
 
-        <div class="selection-area">
-            <select id="sinif-select" onchange="updateDonemler()">
-                <option value="">Sınıf Seçiniz</option>
-                <option value="1. Sınıf">1. Sınıf</option>
-                <option value="2. Sınıf">2. Sınıf</option>
-                <option value="3. Sınıf">3. Sınıf</option>
-                <option value="4. Sınıf">4. Sınıf</option>
-            </select>
-            <select id="donem-select" onchange="updateDersler()" disabled>
-                <option value="">Dönem Seçiniz</option>
-            </select>
-            <select id="ders-select" onchange="updateTestler()" disabled>
-                <option value="">Ders Seçiniz</option>
-            </select>
-            <select id="test-select" onchange="startQuiz()" disabled>
-                <option value="">Test Seçiniz</option>
-            </select>
-        </div>
+<h2>İSG Çıkmış Sorular</h2>
 
-        <div class="stats">
-            <div class="stat-box correct-box">Doğru: <span id="correct-count">0</span></div>
-            <div class="stat-box wrong-box">Yanlış: <span id="wrong-count">0</span></div>
-        </div>
+<select id="ders"><option value="">Ders seç</option></select>
+<select id="sinav"><option value="">Sınav seç</option></select>
+<select id="test"><option value="">Test seç</option></select>
 
-        <div id="quiz-area">
-            <p id="placeholder" class="placeholder-text">Lütfen sınıf, dönem, ders ve çözmek istediğiniz testi seçin.</p>
-            <div id="question" class="question-text"></div>
-            <div id="options" class="options"></div>
-            <button id="next-btn" onclick="loadNextQuestion()">Sonraki Soru</button>
-        </div>
-    </div>
+<div id="question"></div>
+<div id="options"></div>
+<button id="next" onclick="nextQuestion()">Sonraki</button>
 
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</div>
 
-    <script>
-        // Supabase Bağlantısı
-        const supabaseUrl = 'https://uvdilqnmdyfvntdcdfiv.supabase.co';
-        const supabaseKey = 'sb_publishable_m-58nv-vhIZVfdtZVtA8iQ_yEsMRacL';
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        const dersData = {
-            "1. Sınıf": {
-                "Güz": ["ATATÜRK İLKELERİ VE İNKILAP TARİHİ I", "HUKUKUN TEMEL KAVRAMLARI", "İLK YARDIM", "İŞ HİJYENİ", "TEMEL MATEMATİK", "TÜRK DİLİ I", "YABANCI DİL I"],
-                "Bahar": ["ATATÜRK İLKELERİ VE İNKILAP TARİHİ II", "FİZYOLOJİ", "GENEL KİMYA", "İŞ HUKUKU", "İŞ SAĞLIĞI VE GÜVENLİĞİ", "TÜRK DİLİ II", "YABANCI DİL II"]
-            },
-            "2. Sınıf": {
-                "Güz": ["ÇALIŞMA ALANLARINDA İŞ SAĞLIĞI VE GÜVENLİĞİ I", "İSTATİSTİK", "İŞ KAZALARI VE MESLEK HASTALIKLARI", "MAKİNE VE TEÇHİZAT I", "TEMEL BİYOLOJİ", "TEMEL FİZİK"],
-                "Bahar": ["ÇALIŞMA ALANLARINDA İŞ SAĞLIĞI VE GÜVENLİĞİ II", "İŞ SAĞLIĞI VE GÜVENLİĞİ MEVZUATI - I", "İŞ SAĞLIĞI VE GÜVENLİĞİ YÖNETİM SİSTEMLERİ", "MAKİNE VE TEÇHİZAT II", "RİSK DEĞERLENDİRMESİ VE METODOLOJİSİ", "SOSYAL GÜVENLİK HUKUKU"]
-            },
-            "3. Sınıf": {
-                "Güz": ["ACİL DURUM YÖNETİMİ", "İSTATİSTİK ANALİZ", "İŞ GÜVENLİĞİ EĞİTİM METODLARI", "İŞ SAĞLIĞI VE GÜVENLİĞİ MEVZUATI -II", "İŞLETME YÖNETİMİ", "YANGIN TEHLİKESİ VE YANGIN GÜVENLİĞİ"],
-                "Bahar": ["ERGONOMİ", "HALK SAĞLIĞI", "LOJİSTİK İŞLERİNDE İŞ SAĞLIĞI VE GÜVENLİĞİ", "MADENLERDE İŞ SAĞLIĞI VE GÜVENLİĞİ", "TOPLAM KALİTE YÖNETİMİ", "YAPI İŞLERİNDE İŞ SAĞLIĞI VE GÜVENLİĞİ"]
-            },
-            "4. Sınıf": {
-                "Güz": ["BAKIM VE ONARIMDA İŞ SAĞLIĞI VE GÜVENLİĞİ", "ÇALIŞMA ORTAMI GÖZETİMİ VE PERİYODİK KONTROLLER", "HAVALANDIRMA VE İKLİMLENDİRME", "İŞYERLERİNDE GÜRÜLTÜ VE KONTROLÜ", "RADYASYONLA ÇALIŞMALARDA İŞ SAĞLIĞI VE GÜVENLİĞİ", "UYARI İŞARETLERİ VE ETİKETLEME"],
-                "Bahar": ["ÇALIŞMANIN SEYRİ VE SAĞLIK", "ELEKTİRİKLE ÇALIŞMALARDA İŞ SAĞLIĞI VE GÜVENLİĞİ", "İNSAN KAYNAKLARI YÖNETİMİ", "İŞ SAĞLIĞI VE GÜVENLİĞİ UYGULAMASI"]
+<script>
+
+const supabaseUrl = 'https://llwdimueymzxcetgdzpx.supabase.co';
+const supabaseKey = 'sb_publishable_N6yruE8WmO_0wgZeessJxQ_PCwsKNFb';
+const db = supabase.createClient(supabaseUrl, supabaseKey);
+
+let questions = [];
+let index = 0;
+
+/* ========================= */
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+/* ========================= */
+async function loadDers() {
+    let { data, error } = await db.from('sorular').select('ders_adi');
+
+    if(error) return alert("DB hatası");
+
+    let unique = [...new Set(data.map(x=>x.ders_adi))];
+
+    let el = document.getElementById('ders');
+    el.innerHTML = "<option value=''>Ders seç</option>";
+
+    unique.forEach(d=>{
+        el.innerHTML += `<option value="${d}">${d}</option>`;
+    });
+}
+
+/* ========================= */
+document.getElementById('ders').onchange = async function() {
+
+    let ders = this.value;
+    if(!ders) return;
+
+    let { data } = await db
+    .from('sorular')
+    .select('sinav_turu')
+    .eq('ders_adi', ders);
+
+    let unique = [...new Set(data.map(x=>x.sinav_turu))];
+
+    let el = document.getElementById('sinav');
+    el.innerHTML = "<option value=''>Sınav seç</option>";
+
+    unique.forEach(s=>{
+        el.innerHTML += `<option value="${s}">${s}</option>`;
+    });
+};
+
+/* ========================= */
+document.getElementById('sinav').onchange = async function() {
+
+    let ders = document.getElementById('ders').value;
+    let sinav = this.value;
+    if(!sinav) return;
+
+    let { data } = await db
+    .from('sorular')
+    .select('test_no')
+    .eq('ders_adi', ders)
+    .eq('sinav_turu', sinav);
+
+    let unique = [...new Set(data.map(x=>x.test_no))];
+
+    let el = document.getElementById('test');
+    el.innerHTML = "<option value=''>Test seç</option>";
+
+    unique.forEach(t=>{
+        el.innerHTML += `<option value="${t}">Test ${t}</option>`;
+    });
+};
+
+/* ========================= */
+document.getElementById('test').onchange = async function() {
+
+    let ders = document.getElementById('ders').value;
+    let sinav = document.getElementById('sinav').value;
+    let test = this.value;
+    if(!test) return;
+
+    let { data, error } = await db
+    .from('sorular')
+    .select('*')
+    .eq('ders_adi', ders)
+    .eq('sinav_turu', sinav)
+    .eq('test_no', test)
+    .order('soru_no');
+
+    if(error || !data || data.length === 0){
+        alert("Soru yok");
+        return;
+    }
+
+    questions = shuffle(data);
+    index = 0;
+
+    document.getElementById('next').style.display = "none";
+
+    showQuestion();
+};
+
+/* ========================= */
+function showQuestion(){
+
+    let q = questions[index];
+    if(!q) return;
+
+    document.getElementById('question').innerHTML =
+        `<b>Soru ${index+1}:</b><br>` +
+        (q.soru_metni || "") +
+        (q.gorsel_url ? `<br><img src="${q.gorsel_url}" width="100%">`:"");
+
+    let opts = document.getElementById('options');
+    opts.innerHTML = "";
+
+    let secenekler = [
+        {k:"A",v:q.secenek_a},
+        {k:"B",v:q.secenek_b},
+        {k:"C",v:q.secenek_c},
+        {k:"D",v:q.secenek_d},
+        {k:"E",v:q.secenek_e}
+    ];
+
+    shuffle(secenekler);
+
+    secenekler.forEach(opt=>{
+        if(!opt.v) return;
+
+        let btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = opt.v;
+
+        btn.onclick = ()=>{
+            let all = document.querySelectorAll(".option-btn");
+            all.forEach(b=>b.disabled=true);
+
+            if(opt.k === q.dogru_cevap){
+                btn.classList.add("correct");
+            } else {
+                btn.classList.add("wrong");
+
+                all.forEach(b=>{
+                    if(b.innerText === q["secenek_"+q.dogru_cevap.toLowerCase()]){
+                        b.classList.add("correct");
+                    }
+                });
             }
+
+            document.getElementById('next').style.display = "block";
         };
 
-        let currentQuestions = [];
-        let currentQuestionIndex = 0;
-        let correctScore = parseInt(localStorage.getItem('isg_correct')) || 0;
-        let wrongScore = parseInt(localStorage.getItem('isg_wrong')) || 0;
+        opts.appendChild(btn);
+    });
+}
 
-        document.getElementById('correct-count').innerText = correctScore;
-        document.getElementById('wrong-count').innerText = wrongScore;
+/* ========================= */
+function nextQuestion(){
+    index++;
+    if(index < questions.length){
+        showQuestion();
+        document.getElementById('next').style.display = "none";
+    } else {
+        alert("Test bitti");
+    }
+}
 
-        function resetQuizArea() {
-            document.getElementById('placeholder').style.display = 'block';
-            document.getElementById('placeholder').innerText = 'Lütfen seçimlerinizi tamamlayın.';
-            document.getElementById('question').style.display = 'none';
-            document.getElementById('options').innerHTML = '';
-            document.getElementById('next-btn').style.display = 'none';
-        }
+loadDers();
 
-        function updateDonemler() {
-            const sinif = document.getElementById('sinif-select').value;
-            const donemSelect = document.getElementById('donem-select');
-            donemSelect.innerHTML = '<option value="">Dönem Seçiniz</option>';
-            document.getElementById('ders-select').innerHTML = '<option value="">Ders Seçiniz</option>';
-            document.getElementById('test-select').innerHTML = '<option value="">Test Seçiniz</option>';
-            document.getElementById('ders-select').disabled = true;
-            document.getElementById('test-select').disabled = true;
-            resetQuizArea();
-            if (sinif) {
-                Object.keys(dersData[sinif]).forEach(donem => {
-                    donemSelect.innerHTML += `<option value="${donem}">${donem}</option>`;
-                });
-                donemSelect.disabled = false;
-            } else {
-                donemSelect.disabled = true;
-            }
-        }
+</script>
 
-        function updateDersler() {
-            const sinif = document.getElementById('sinif-select').value;
-            const donem = document.getElementById('donem-select').value;
-            const dersSelect = document.getElementById('ders-select');
-            dersSelect.innerHTML = '<option value="">Ders Seçiniz</option>';
-            document.getElementById('test-select').innerHTML = '<option value="">Test Seçiniz</option>';
-            document.getElementById('test-select').disabled = true;
-            resetQuizArea();
-            if (sinif && donem) {
-                dersData[sinif][donem].forEach(ders => {
-                    dersSelect.innerHTML += `<option value="${ders}">${ders}</option>`;
-                });
-                dersSelect.disabled = false;
-            } else {
-                dersSelect.disabled = true;
-            }
-        }
-
-        async function updateTestler() {
-            const ders = document.getElementById('ders-select').value;
-            const testSelect = document.getElementById('test-select');
-            testSelect.innerHTML = '<option value="">Test Seçiniz</option>';
-            resetQuizArea();
-
-            if (!ders) {
-                testSelect.disabled = true;
-                return;
-            }
-
-            document.getElementById('placeholder').innerText = 'Testler yükleniyor...';
-
-            const { data, error } = await _supabase
-                .from('sorular')
-                .select('test_adi')
-                .eq('ders_adi', ders);
-
-            if (error || !data || data.length === 0) {
-                document.getElementById('placeholder').innerText = 'Bu derse ait henüz soru/test yüklenmemiş.';
-                testSelect.disabled = true;
-                return;
-            }
-
-            const uniqueTests = [...new Set(data.map(item => item.test_adi).filter(t => t))];
-            uniqueTests.sort().forEach(test => {
-                testSelect.innerHTML += `<option value="${test}">${test}</option>`;
-            });
-
-            testSelect.disabled = false;
-            document.getElementById('placeholder').innerText = 'Lütfen çözmek istediğiniz testi seçin.';
-        }
-
-        async function startQuiz() {
-            const ders = document.getElementById('ders-select').value;
-            const test = document.getElementById('test-select').value;
-
-            if (ders && test) {
-                document.getElementById('placeholder').style.display = 'block';
-                document.getElementById('placeholder').innerText = 'Sorular yükleniyor...';
-                document.getElementById('question').style.display = 'none';
-                document.getElementById('options').innerHTML = '';
-                document.getElementById('next-btn').style.display = 'none';
-
-                const { data, error } = await _supabase
-                    .from('sorular')
-                    .select('*')
-                    .eq('ders_adi', ders)
-                    .eq('test_adi', test);
-
-                if (error || !data || data.length === 0) {
-                    document.getElementById('placeholder').innerText = 'Bu teste ait soru bulunamadı.';
-                    return;
-                }
-
-                currentQuestions = data.sort(() => Math.random() - 0.5);
-                currentQuestionIndex = 0;
-                document.getElementById('placeholder').style.display = 'none';
-                document.getElementById('question').style.display = 'block';
-                loadNextQuestion();
-            }
-        }
-
-        function loadNextQuestion() {
-            if (currentQuestionIndex >= currentQuestions.length) {
-                document.getElementById('question').innerHTML = '<div class="test-finished">Tebrikler! Bu testi tamamladınız. 🎉<br>Menüden başka bir test seçebilirsiniz.</div>';
-                document.getElementById('options').innerHTML = '';
-                document.getElementById('next-btn').style.display = 'none';
-                return;
-            }
-
-            document.getElementById('next-btn').style.display = 'none';
-            document.getElementById('options').innerHTML = '';
-
-            const q = currentQuestions[currentQuestionIndex];
-            
-            // Soru metni veya varsa görsel URL'si ile beraber yükleme
-            let questionContent = `Soru ${currentQuestionIndex + 1}/${currentQuestions.length}: ${q.soru_metni}`;
-            if (q.gorsel_url) {
-                questionContent += `<img src="${q.gorsel_url}" alt="Soru Görseli">`;
-            }
-            document.getElementById('question').innerHTML = questionContent;
-
-            const opts = [
-                { key: 'A', text: q.secenek_a },
-                { key: 'B', text: q.secenek_b },
-                { key: 'C', text: q.secenek_c },
-                { key: 'D', text: q.secenek_d },
-                { key: 'E', text: q.secenek_e }
-            ];
-
-            opts.forEach(opt => {
-                if(opt.text) {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.innerText = `${opt.key}) ${opt.text}`;
-                    btn.onclick = () => checkAnswer(opt.key, q.dogru_cevap, btn);
-                    document.getElementById('options').appendChild(btn);
-                }
-            });
-        }
-
-        function checkAnswer(choice, encryptedCorrectAnswer, btn) {
-            const allBtns = document.querySelectorAll('.option-btn');
-            allBtns.forEach(b => b.disabled = true);
-
-            const isCorrect = btoa(choice) === encryptedCorrectAnswer;
-
-            if (isCorrect) {
-                btn.classList.add('correct');
-                correctScore++;
-            } else {
-                btn.classList.add('wrong');
-                wrongScore++;
-            }
-            
-            currentQuestionIndex++;
-            localStorage.setItem('isg_correct', correctScore);
-            localStorage.setItem('isg_wrong', wrongScore);
-            document.getElementById('correct-count').innerText = correctScore;
-            document.getElementById('wrong-count').innerText = wrongScore;
-            document.getElementById('next-btn').style.display = 'block';
-        }
-    </script>
 </body>
 </html>
